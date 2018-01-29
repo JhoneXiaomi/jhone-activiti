@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd   
+            http://www.springframework.org/schema/mvc   
+            http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd   
+            http://www.springframework.org/schema/context   
+            http://www.springframework.org/schema/context/spring-context-4.3.xsd   
+            http://www.springframework.org/schema/aop   
+            http://www.springframework.org/schema/aop/spring-aop-4.3.xsd   
+            http://www.springframework.org/schema/tx   
+            http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+            
+    <import resource="classpath:conf/spring-activiti.xml"></import>
+               
+    <!-- 扫描service、dao组件 -->  
+    <context:component-scan base-package="com.hebabr"/>
+    
+    <!-- 启动AOP支持 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+    <!-- 分解配置 jdbc.properites -->  
+    <context:property-placeholder location="classpath:conf/jdbc.properties" />  
+       
+     <!-- 配置数据源，使用的是alibaba的Druid -->  
+      
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">  
+        <property name="driverClassName" value="${jdbc.driverClassName}" />  
+        <property name="url" value="${jdbc.url}" />  
+        <property name="username" value="${jdbc.username}" />  
+        <property name="password" value="${jdbc.password}" />  
+  
+        <!-- 初始化连接大小 -->  
+        <property name="initialSize" value="${jdbc.initialSize}" />  
+        <!-- 连接池最大使用连接数量 -->  
+        <property name="maxActive" value="${jdbc.maxActive}" />  
+        <!-- 连接池最小空闲 -->  
+        <property name="minIdle" value="${jdbc.minIdle}" />  
+        <!-- 获取连接最大等待时间 -->  
+        <property name="maxWait" value="${jdbc.maxWait}" />  
+  
+        <property name="validationQuery" value="${jdbc.validationQuery}" />  
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}" />  
+        <property name="testOnReturn" value="${jdbc.testOnReturn}" />  
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}" />  
+  
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->  
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />  
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->  
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />  
+  
+        <!-- 打开removeAbandoned功能 -->  
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}" />  
+        <!-- 10800秒，也就是3个小时 -->  
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />  
+        <!-- 关闭abanded连接时输出错误日志 -->  
+        <property name="logAbandoned" value="${jdbc.logAbandoned}" />  
+  
+        <!-- 监控数据库 -->  
+        <property name="filters" value="${jdbc.filters}" />  
+    </bean> 
+  
+  
+    <!-- sessionFactory 将spring和mybatis整合 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <property name="configLocation" value="classpath:conf/spring-mybatis.xml" />  
+        <property name="mapperLocations" value="classpath*:com/hebabr/model/mapping/*.xml" />  
+    </bean>  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.hebabr.base.dao" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"></property>  
+    </bean>  
+  
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">  
+    </bean>
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">  
+        <property name="patterns">  
+            <list>  
+                <value>com.hebabr.*.service.*</value>  
+            </list>  
+        </property>  
+    </bean>  
+    <aop:config>  
+        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />  
+    </aop:config> 
+     
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <tx:method name="add*" propagation="REQUIRED" />  
+            <tx:method name="append*" propagation="REQUIRED" />  
+            <tx:method name="insert*" propagation="REQUIRED" />  
+            <tx:method name="save*" propagation="REQUIRED" />  
+            <tx:method name="update*" propagation="REQUIRED" />  
+            <tx:method name="modify*" propagation="REQUIRED" />  
+            <tx:method name="edit*" propagation="REQUIRED" />  
+            <tx:method name="delete*" propagation="REQUIRED" />  
+            <tx:method name="remove*" propagation="REQUIRED" />  
+            <tx:method name="repair" propagation="REQUIRED" />  
+  
+            <tx:method name="get*" propagation="SUPPORTS" />  
+            <tx:method name="find*" propagation="SUPPORTS" />   
+            <tx:method name="load*" propagation="SUPPORTS" />  
+            <tx:method name="search*" propagation="SUPPORTS" />  
+            <tx:method name="datagrid*" propagation="SUPPORTS" />  
+  
+            <tx:method name="*" propagation="SUPPORTS" />  
+        </tx:attributes>  
+    </tx:advice>  
+    <aop:config>  
+        <aop:pointcut id="transactionPointcut" expression="execution(* com.hebabr.*.service..*Impl.*(..))" />  
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice" />  
+    </aop:config> 
+</beans> 
