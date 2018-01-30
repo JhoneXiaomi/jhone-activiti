@@ -15,7 +15,7 @@
 	<jackson.version>2.5.0</jackson.version>
 	<cxf.version>3.1.7</cxf.version>
 	<!-- activiti包版本 -->
-    <activiti.version>5.21.0</activiti.version>
+    <activiti.version>5.22.0</activiti.version>
     <!-- log4j日志文件管理包版本 -->
 	<slf.version>1.7.10</slf.version>
 	<jackson.version>2.6.3</jackson.version>
@@ -83,35 +83,13 @@
     	<artifactId>spring-aop</artifactId>
     	<version>${spring.version}</version>
     </dependency>
-    <!-- 
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-core</artifactId>
-	    <version>4.2.1.RELEASE</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-web</artifactId>
-	    <version>4.2.1.RELEASE</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-config</artifactId>
-	    <version>4.2.1.RELEASE</version>
-	</dependency>
-
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-taglibs</artifactId>
-	    <version>4.2.1.RELEASE</version>
-	</dependency>
-	 -->
 	<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
 	<dependency>
 	    <groupId>org.apache.httpcomponents</groupId>
 	    <artifactId>httpclient</artifactId>
-	    <version>4.5.3</version>
+	    <version>4.5.2</version>
 	</dependency>
+
 	
     <dependency>
 	    <groupId>org.mybatis</groupId>
@@ -305,7 +283,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
         <configuration>
-          <warSourceDirectory>${basedir}/WebRoot</warSourceDirectory>
+          <warSourceDirectory>${basedir}/WebRoot </warSourceDirectory>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>      
