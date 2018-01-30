@@ -3,7 +3,6 @@ package com.hebabr.base.util;
 import java.security.MessageDigest;
 
 public class Md5Util {
-    private static boolean debug = false;
 
     public static String MD5Encode(String sourceString) {
         String resultString = null;

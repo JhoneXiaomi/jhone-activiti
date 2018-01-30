@@ -51,9 +51,7 @@ public final class PropertiesUtils {
      * @return
      */
     public boolean load() {
-    	String pathName1 = PropertiesUtils.class.getClassLoader().getClass().getName();
         String pathName = PropertiesUtils.class.getClassLoader().getResource(PFILE).getPath();
-        System.out.println(pathName);
         return load(pathName);
     }
 
