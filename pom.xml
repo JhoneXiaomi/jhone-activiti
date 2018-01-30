@@ -19,7 +19,7 @@
     <!-- log4j日志文件管理包版本 -->
 	<slf.version>1.7.10</slf.version>
 	<jackson.version>2.6.3</jackson.version>
-	<junit.version>4.10</junit.version>
+	<junit.version>4.12</junit.version>
   </properties>
   <dependencies>
     <dependency>
@@ -207,28 +207,6 @@
          <artifactId>spring-jms</artifactId>  
          <version>${spring.version}</version>  
      </dependency>  
-     <!--Javax.Jms-->  
-     <dependency>  
-         <groupId>javax.jms</groupId>  
-         <artifactId>javax.jms-api</artifactId>  
-         <version>2.0</version>  
-     </dependency>  
-	
-	<dependency>
-	  <groupId>org.apache.activemq</groupId>
-	  <artifactId>activemq-all</artifactId>
-	  <version>5.11.1</version>
-	</dependency>
-	<dependency>  
-         <groupId>org.apache.activemq</groupId>  
-         <artifactId>activemq-pool</artifactId>  
-         <version>5.11.1</version>  
-     </dependency>
-     <dependency>  
-         <groupId>org.apache.activemq</groupId>  
-         <artifactId>activemq-spring</artifactId>  
-         <version>5.11.1</version>  
-     </dependency>
      <!--xbean-spring-->  
      <dependency>  
          <groupId>org.apache.xbean</groupId>  
