@@ -4,39 +4,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
-
-import javax.servlet.http.HttpSession;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.FlowElement;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.pvm.process.TransitionImpl;
-import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -45,23 +29,20 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hebabr.base.service.ActivitiAPIUtilService;
-import com.hebabr.base.util.UuidUtils;
 
 /**
  * 
- * activiti 常用的方法接口API实现类方法
- * 
- * 
- * @author zhangzhiwei
- * 
- * @version 1.0.0
+ * @Description activiti 常用的方法接口API实现类方法
+ *
+ * @author jhone
+ * @createTime 2018年1月31日上午1:14:32
  */
 @Service
 public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 
-	@Autowired // 注入
+	@Autowired 
 	private RepositoryService repositoryService;
-	@Autowired // 注入
+	@Autowired 
 	private TaskService taskService;
 	@Autowired
 	private ProcessEngine processEngine;
@@ -69,15 +50,7 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 	private RuntimeService runtimeService;
 	@Autowired
 	private HistoryService historyService;
-	/*
-	 * * 部署流程
-	 * 
-	 * @param classForBpmn 加载的bpmn 文件路径
-	 * 
-	 * @param classForImg 加载的Img 文件路径
-	 * 
-	 * @return Deployment 已发布流程
-	 */
+	
 	@Override
 	public Deployment deployByBpmnAndImg(String delopmentName, String classForBpmn, String classForImg) {
 
@@ -90,14 +63,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return deployment;
 	}
 
-	/**
-	 * 
-	 * 部署流程
-	 * 
-	 * @param classForBpmn
-	 *            加载的bpmn 文件路径
-	 * @throws FileNotFoundException 
-	 */
 	@Override
 	public Deployment deployByZip(String delopmentName, String zipFile) throws FileNotFoundException {
 		File file=new File(zipFile);
@@ -109,17 +74,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return deployment;
 	}
 
-	/**
-	 * 
-	 * 根据流程定义的Key启动流程
-	 * 
-	 * @param processInstancekey
-	 *            流程KEY
-	 * @param params
-	 *            map 类型传入的参数
-	 * @return processInstance 返回流程
-	 * 
-	 */
 	@Override
 	public ProcessInstance startProcessByKey(String processInstanceKey, Map<String, Object> params) {
 		ProcessInstance pi = ProcessEngines.getDefaultProcessEngine().getRuntimeService()// 获取正在执行的Service
@@ -128,14 +82,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return pi;
 	}
 
-	/**
-	 * 
-	 * 通过流程Id启动流程
-	 * 
-	 * @param zipFile
-	 *            加载的zip压缩文件路径，文件包含bpmn文件和img文件
-	 * 
-	 */
 	public ProcessInstance startProcessById(String processinstanceDefinitionId, Map<String, Object> params) {
 		ProcessInstance pi = ProcessEngines.getDefaultProcessEngine().getRuntimeService()// 获取正在执行的Service
 				.startProcessInstanceById(processinstanceDefinitionId, params);// 按照流程定义的Id
@@ -143,14 +89,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return pi;
 	}
 
-	/**
-	 * 
-	 * 关闭流程
-	 * 
-	 * @param zipFile
-	 *            加载的zip压缩文件路径，文件包含bpmn文件和img文件
-	 * 
-	 */
 	@Override
 	public void closeProcess(String processInstanceByKey, Map<String, Object> params) {
 		ProcessEngines.getDefaultProcessEngine().getRuntimeService()// 获取正在执行的Service
@@ -158,13 +96,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 																			// 启动流程实例，默认是最新版本启动
 	}
 
-	/**
-	 * 
-	 * 查看流程状态
-	 * 
-	 * @param processInstanceId
-	 * 
-	 */
 	public boolean isCompleted(String processInstanceId) {
 		boolean flag = false;
 		ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId)
@@ -174,15 +105,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return flag;
 	}
 
-	/**
-	 * 
-	 * 完成任务
-	 * 
-	 * @param taskId
-	 *            任务ID
-	 * @param params
-	 *            map类型传入的参数
-	 */
 	@Override
 	public void completePersonTask(String taskId, Map<String, Object> params) {
 
@@ -193,12 +115,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		processEngine.getTaskService().complete(taskId, params);
 	}
 
-	/**
-	 * 
-	 * 查询流程定义
-	 * 
-	 * @return List<ProcessDefinitionEntity> 流程定义的集合
-	 */
 	public List<ProcessDefinition> findProcessDefinition() {
 
 		List<ProcessDefinition> pList = processEngine.getRepositoryService().createProcessDefinitionQuery()
@@ -206,15 +122,7 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return pList;
 	}
 
-	/**
-	 * 
-	 * 通过taskId 获取任务
-	 * 
-	 * @param assignee
-	 *            执行者名称
-	 * 
-	 * @return Task 任务
-	 */
+	
 	@Override
 	public Task findTaskByTaskId(String taskid) {
 
@@ -222,14 +130,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return task;
 	}
 
-	/**
-	 * 
-	 * 查询任务通过流程Id
-	 * 
-	 * @param processInstanceId
-	 *            流程Id
-	 * @return Task 执行任务
-	 */
 	public Task findTaskByProcessInstanceId(String processInstanceId) {
 		Task task = (Task) processEngine.getTaskService().createTaskQuery().processInstanceId(processInstanceId)
 				.singleResult();
@@ -237,12 +137,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return task;
 	}
 
-	/**
-	 * 
-	 * 获取所有任务
-	 * 
-	 * @return List<Task> 执行者任务集合
-	 */
 	@Override
 	public List<Task> findAllTask() {
 		List<Task> lTask = processEngine.getTaskService().createTaskQuery()//
@@ -251,14 +145,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return lTask;
 	}
 
-	/**
-	 * 
-	 * 查询流程状态
-	 * 
-	 * @param processInatanceId
-	 *            流程Id值
-	 * @return boolean 返回结果
-	 */
 	@Override
 	public boolean findProcessState(String processInatanceId) {
 		boolean flag = runtimeService.createProcessInstanceQuery().processInstanceId(processInatanceId).singleResult()
@@ -278,17 +164,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		commitProcess(taskId, null, endActivity.getId());
 	}
 
-	/**
-	 * 流程转向操作
-	 * 
-	 * @param taskId
-	 *            当前任务ID
-	 * @param activityId
-	 *            目标节点任务ID
-	 * @param params
-	 *            流程变量
-	 * @throws Exception
-	 */
 	@Override
 	public void callBackProcess(String taskId, String activityId, Map<String, Object> params) {
 		if (StringUtils.isEmpty(activityId))
@@ -307,15 +182,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 
 	}
 
-	/**
-	 * 取回流程
-	 * 
-	 * @param taskId
-	 *            当前任务ID
-	 * @param activityId
-	 *            取回节点ID
-	 * @throws Exception
-	 */
 	@Override
 	public void callBackProcess(String taskId, String activityId) {
 		if (StringUtils.isEmpty(activityId)) {
@@ -364,16 +230,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return null;
 	}
 
-	/**
-	 * @param taskId
-	 *            当前任务ID
-	 * @param variables
-	 *            流程变量
-	 * @param activityId
-	 *            流程转向执行任务节点ID<br>
-	 *            此参数为空，默认为提交操作
-	 * @throws Exception
-	 */
 	@Override
 	public void commitProcess(String taskId, Map<String, Object> params, String activityId) {
 		if (null == params)
@@ -386,14 +242,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 
 	}
 
-	/**
-	 * 根据任务ID获取对应的流程实例
-	 * 
-	 * @param taskId
-	 *            任务ID
-	 * @return
-	 * @throws Exception
-	 */
 	@Override
 	public ProcessInstance findProcessInstanceByTaskId(String taskId) {
 		// 找到流程实例
@@ -409,27 +257,12 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return processInstance;
 	}
 
-	/**
-	 * 根据流程实例ID和任务key值查询所有同级任务集合
-	 * 
-	 * @param processInstanceId
-	 * @param key
-	 * @return
-	 */
 	@Override
 	public List<Task> findTaskListByKey(String processInstanceId, String key) {
 		return taskService.createTaskQuery().processInstanceId(processInstanceId).taskDefinitionKey(key).list();
 
 	}
 
-	/**
-	 * 还原指定活动节点流向
-	 * 
-	 * @param activityImpl
-	 *            活动节点
-	 * @param oriPvmTransitionList
-	 *            原有节点流向集合
-	 */
 	@Override
 	public void restoreTransition(ActivityImpl activityImpl, List<PvmTransition> oriPvmTransitionList) {
 
@@ -485,13 +318,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return processDefinition;
 	}
 
-	/**
-	 * 清空指定活动节点流向
-	 * 
-	 * @param activityImpl
-	 *            活动节点
-	 * @return 节点流向集合
-	 */
 	@Override
 	public List<PvmTransition> clearTransition(ActivityImpl activityImpl) {
 		// 存储当前节点所有流向临时变量
@@ -506,7 +332,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return oriPvmTransitionList;
 	}
 
-	// 获取当前节点ID
 	@Override
 	public TaskEntity findTaskById(String taskId) {
 		TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(taskId).singleResult();
@@ -520,38 +345,14 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return task;
 	}
 
-	/**
-	 * 
-	 * 删除流程定义,包含关联表的全部删除
-	 * 
-	 * @param delopmentId
-	 *            流程的Id
-	 * 
-	 */
-	public void deleteDeloyment(String delopmentId, boolean flag) {
-		repositoryService.deleteDeployment(delopmentId, flag);
+	public void deleteDeloyment(String deploymentId, boolean flag) {
+		repositoryService.deleteDeployment(deploymentId, flag);
 	}
 
-	/**
-	 * 
-	 * 删除流程定义,不包含关联表的全部删除
-	 * 
-	 * @param delopmentId
-	 *            流程的Id
-	 * 
-	 */
 	public void deleteDeloyment(String delopmentId) {
 		repositoryService.deleteDeployment(delopmentId);
 	}
 
-	/**
-	 * 
-	 * 删除所有的流程,不包含关联的删除
-	 * 
-	 * @param delopmentId
-	 *            流程的Id
-	 * 
-	 */
 	public void deleteAllDeloyment(String delopmentId) {
 		List<ProcessDefinition> pList = this.findProcessDefinition();
 		for (ProcessDefinition p : pList) {
@@ -559,14 +360,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		}
 	}
 
-	/**
-	 * 
-	 * 删除所有的流程,包含关联的删除
-	 * 
-	 * @param delopmentId
-	 *            流程的Id
-	 * 
-	 */
 	public void deleteAllDeloyment(String delopmentId, boolean flag) {
 		List<ProcessDefinition> pList = this.findProcessDefinition();
 		for (ProcessDefinition p : pList) {
@@ -574,45 +367,16 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		}
 	}
 
-
-	/**
-	 * 
-	 * 设置流程变量
-	 * 
-	 * @param taskId
-	 *            任务Id
-	 * @param paramName
-	 *            变量名称
-	 * @param paramValue
-	 *            变量值
-	 */
 	public void setVariables(String taskId, String paramName, String paramValue) {
 		TaskService taskService = processEngine.getTaskService();
 		taskService.setVariable(taskId, paramName, paramValue);
 	}
 
-	/**
-	 * 
-	 * 获取流程变量
-	 * 
-	 * @param taskId
-	 *            任务Id
-	 * @param paramName
-	 *            变量名称
-	 * @return Object 返回变量值
-	 */
-	public Object findVariables(String processInstanceId, String paramName) {
-		Object paramValue = runtimeService.getVariable(processInstanceId, paramName);
+	public Object findVariables(String executionId , String variableName ) {
+		Object paramValue = runtimeService.getVariable(executionId , variableName);
 		return paramValue;
 	}
 
-	/**
-	 * 获取到当前任务的图中位置信息
-	 * 
-	 * @param taskId
-	 *            任务的Id值
-	 * @return 当前任务节点的位置信息
-	 */
 	public Map<String, String> getCurrentActivityCoordinates(String taskId) {
 		Map<String, String> coordinates = new HashMap<String, String>();
 		// 1. 获取到当前活动的ID
@@ -633,14 +397,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return coordinates;
 	}
 
-	/**
-	 * 
-	 * 查询已经未结束流程的个人任务
-	 * 
-	 * @param String
-	 *            assignee 任务办理人
-	 * @return List<Task> 任务集合
-	 */
 	@Override
 	public List<HistoricTaskInstance> findPersonNotFinashedHistoryTask(String assignee) {
 
@@ -650,14 +406,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return listTasks;
 	}
 
-	/**
-	 * 
-	 * 查询已经结束流程的个人任务
-	 * 
-	 * @param String
-	 *            assignee 任务办理人
-	 * @return List<Task> 任务集合
-	 */
 	@Override
 	public List<HistoricTaskInstance> findPersonFinashedHistoryTask(String assignee) {
 		List<HistoricTaskInstance> listTasks = historyService.createHistoricTaskInstanceQuery() // 创建历史任务实例查询
@@ -667,29 +415,12 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return listTasks;
 	}
 
-	/**
-	 * 
-	 * 查询任务
-	 * 
-	 * @param processDefinedId
-	 *            流程定义的Id
-	 * @return Task 执行任务
-	 */
 	@Override
 	public Task findTaskByExecutionId(String executionId) {
 		Task task = taskService.createTaskQuery().executionId(executionId).singleResult();
 		return task;
 	}
 	
-
-	/**
-	 * 
-	 * 根据流程定义id获取流程定义
-	 * 
-	 * @param processDefinitionId
-	 *            流程定义Id
-	 * @return
-	 */
 	@Override
 	public ProcessDefinition findProcessDefinitionById(String processDefinitionId) {
 		ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
@@ -697,28 +428,14 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return processDefinition;
 	}
 
-	/**
-	 * 查看用户组任务
-	 * 
-	 * @return List<Task> 当前用户的组任务集合
-	 * 
-	 */
 	@Override
-	public List<Task> findGroupTask(String assigneeId) {
-		List<Task> lTask = taskService.createTaskQuery().taskCandidateUser(assigneeId)// 组任务的办理人查询
+	public List<Task> findGroupTask(String candidateUser) {
+		List<Task> lTask = taskService.createTaskQuery().taskCandidateUser(candidateUser)// 组任务的办理人查询
 				.orderByTaskCreateTime().asc()// 使用创建时间的升序排列
 				.list();// 返回列表
 		return lTask;
 	}
 
-	/**
-	 * 
-	 * 获取个人任务
-	 * 
-	 * @param assignee
-	 *            执行者名称
-	 * @return List<Task> 执行者任务集合
-	 */
 	@Override
 	public List<Task> findPersonTask(String assignee) {
 
@@ -730,52 +447,24 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 		return list;
 	}
 
-	// 获取流程
 	@Override
 	public ActivityImpl getActivityImpl(RepositoryService repositoryService, String processDefId, String activityId) {
 		ProcessDefinitionEntity pde = getProcessDefinition(repositoryService, processDefId);
 		return (ActivityImpl) pde.findActivity(activityId);
 	}
 
-	// 获取流程定义实例
 	@Override
 	public ProcessDefinitionEntity getProcessDefinition(RepositoryService repositoryService, String processDefId) {
 
 		return (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processDefId);
 	}
 
-	// 根据流程定义id 获取对应的流程定义
 	@Override
 	public ProcessDefinition findProcessDefinitionByProcessDefinitionId(String processDefinitionId) {
 
 		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
 				.processDefinitionId(processDefinitionId).singleResult();
 		return processDefinition;
-	}
-
-	@Override
-	public void readProcessDefindNodeFromLocahost(HttpSession session, String filePath) {
-		// FIXME Auto-generated method stub
-		
-	}
-
-	@Override
-	public void readProcessDefindNodeFromNetwork(String userId, String processDefinitionId) {
-		// FIXME Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean startProcessInstance(HttpSession session, String flowProcessinstanceKeyId,
-			String processinstanceDefinitionId, Map<String, Object> params, String title) {
-		// FIXME Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Map<String, Object> startNodeParamInit(String processDefinitionId) {
-		// FIXME Auto-generated method stub
-		return null;
 	}
 
 }
