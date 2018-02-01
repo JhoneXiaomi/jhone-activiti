@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.hebabr.base.dao.ActReDeploymentMapper;
+import com.hebabr.model.ActReDeployment;
+
 @RunWith(SpringJUnit4ClassRunner.class) // 整合 
 @ContextConfiguration(locations="classpath:conf/spring.xml") 
 public class jhoneTest {
@@ -26,7 +29,8 @@ public class jhoneTest {
 	private RepositoryService repositoryService;
 	@Autowired
 	private RuntimeService runtimeService;
-	
+	@Autowired
+	private ActReDeploymentMapper actReDeploymentMapper;
 	
 	
 	@Test
@@ -56,7 +60,7 @@ public class jhoneTest {
 	@Test
 	public void getProDefine() {
 		ProcessDefinition pde = repositoryService.getProcessDefinition("contract_jiancezhongxin:1:4");
-		//System.out.println(pde.getName());
+		actReDeploymentMapper.selectByPrimaryKey("123");
 	}
 	
 	
