@@ -67,7 +67,6 @@ public class ActivitiAPIUtilServiceImpl implements ActivitiAPIUtilService {
 	public Deployment deployByZip(String delopmentName, String zipFile) throws FileNotFoundException {
 		File file=new File(zipFile);
 		InputStream in=new FileInputStream(file);
-		//InputStream in = this.getClass().getClassLoader().getResourceAsStream(zipFile);
 		Deployment deployment = processEngine.getRepositoryService().createDeployment().name(delopmentName)
 				.addZipInputStream(new ZipInputStream(in)).deploy();
 
