@@ -31,6 +31,7 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+<<<<<<< HEAD
 			<name>org.springframework.ide.eclipse.core.springbuilder</name>
 			<arguments>
 			</arguments>
@@ -41,13 +42,18 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+=======
+>>>>>>> update
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
+<<<<<<< HEAD
 		<nature>org.springframework.ide.eclipse.core.springnature</nature>
+=======
+>>>>>>> update
 		<nature>com.genuitec.eclipse.springframework.springnature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
