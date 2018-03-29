@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-<<<<<<< HEAD
 import com.hebabr.base.service.TaskFlowService;
-=======
->>>>>>> update
 import com.hebabr.base.util.ProcessUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class) // 整合
@@ -31,12 +28,9 @@ public class jhoneTest {
 	private RepositoryService repositoryService;
 	@Autowired
 	private RuntimeService runtimeService;
-<<<<<<< HEAD
 	@Autowired
 	private TaskFlowService taskFlowService;  
-=======
->>>>>>> update
-
+	
 	@Test
 	public void deploy() {
 
@@ -69,13 +63,10 @@ public class jhoneTest {
 				"usertask1");
 		System.out.println(activityImpl);
 	}
-<<<<<<< HEAD
 	
 	@Test 
 	public void testTaskFLow() {
 		//taskFlowService.insertTaskAfter(targetTaskKey, taskId, doUserId, names, assignee);
 	}
-=======
->>>>>>> update
 
 }

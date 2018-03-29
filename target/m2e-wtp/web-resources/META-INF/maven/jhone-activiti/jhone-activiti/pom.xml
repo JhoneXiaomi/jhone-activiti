@@ -19,7 +19,7 @@
     <!-- log4j日志文件管理包版本 -->
 	<slf.version>1.7.10</slf.version>
 	<jackson.version>2.6.3</jackson.version>
-	<junit.version>4.12</junit.version>
+	<junit.version>4.12 </junit.version>
   </properties>
   <dependencies>
     <dependency>

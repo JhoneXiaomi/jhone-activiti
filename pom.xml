@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>jhone-activiti</groupId>
-  <artifactId>jhone-activiti</artifactId>
+  <groupId>demo</groupId>
+  <artifactId>demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>jhone-activiti</name>
+  <name>demo</name>
   <description/>
   <properties>
     <webVersion>3.1</webVersion>
@@ -15,11 +15,10 @@
 	<jackson.version>2.5.0</jackson.version>
 	<cxf.version>3.1.7</cxf.version>
 	<!-- activiti包版本 -->
-    <activiti.version>5.22.0</activiti.version>
+    <activiti.version>5.21.0</activiti.version>
     <!-- log4j日志文件管理包版本 -->
 	<slf.version>1.7.10</slf.version>
 	<jackson.version>2.6.3</jackson.version>
-	<junit.version>4.12</junit.version>
   </properties>
   <dependencies>
     <dependency>
@@ -33,14 +32,6 @@
       <artifactId>javax.servlet.jsp.jstl</artifactId>
       <version>1.2.2</version>
     </dependency>
-    
-    <dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>${junit.version}</version>
-		<!--test 表示开发的时候引入，发布的时候不会加载此包 -->
-		<scope>test</scope>
-	</dependency>
     
     <!-- 框架依赖包开始   -->
     <dependency>
@@ -83,13 +74,35 @@
     	<artifactId>spring-aop</artifactId>
     	<version>${spring.version}</version>
     </dependency>
+    <!-- 
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-core</artifactId>
+	    <version>4.2.1.RELEASE</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-web</artifactId>
+	    <version>4.2.1.RELEASE</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-config</artifactId>
+	    <version>4.2.1.RELEASE</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-taglibs</artifactId>
+	    <version>4.2.1.RELEASE</version>
+	</dependency>
+	 -->
 	<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
 	<dependency>
 	    <groupId>org.apache.httpcomponents</groupId>
 	    <artifactId>httpclient</artifactId>
-	    <version>4.5.2</version>
+	    <version>4.5.3</version>
 	</dependency>
-
 	
     <dependency>
 	    <groupId>org.mybatis</groupId>
@@ -207,6 +220,28 @@
          <artifactId>spring-jms</artifactId>  
          <version>${spring.version}</version>  
      </dependency>  
+     <!--Javax.Jms-->  
+     <dependency>  
+         <groupId>javax.jms</groupId>  
+         <artifactId>javax.jms-api</artifactId>  
+         <version>2.0</version>  
+     </dependency>  
+	
+	<dependency>
+	  <groupId>org.apache.activemq</groupId>
+	  <artifactId>activemq-all</artifactId>
+	  <version>5.11.1</version>
+	</dependency>
+	<dependency>  
+         <groupId>org.apache.activemq</groupId>  
+         <artifactId>activemq-pool</artifactId>  
+         <version>5.11.1</version>  
+     </dependency>
+     <dependency>  
+         <groupId>org.apache.activemq</groupId>  
+         <artifactId>activemq-spring</artifactId>  
+         <version>5.11.1</version>  
+     </dependency>
      <!--xbean-spring-->  
      <dependency>  
          <groupId>org.apache.xbean</groupId>  
@@ -237,6 +272,13 @@
     	<artifactId>aopalliance</artifactId>
     	<version>1.0</version>
     </dependency>
+        <!-- memcached 开始 -->
+    <dependency>
+	    <groupId>com.googlecode.xmemcached</groupId>
+	    <artifactId>xmemcached</artifactId>
+	    <version>2.4.2</version>
+	</dependency>
+    <!-- memcached 结束 -->
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -261,7 +303,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
         <configuration>
-          <warSourceDirectory>${basedir}/WebRoot </warSourceDirectory>
+          <warSourceDirectory>${basedir}/WebRoot</warSourceDirectory>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>      
